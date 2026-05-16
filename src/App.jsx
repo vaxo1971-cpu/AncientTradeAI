@@ -1,165 +1,314 @@
-import React, { useEffect, useRef, useState } from "react";
-import { createChart, CandlestickSeries, HistogramSeries } from "lightweight-charts";
-import { TrendingUp, TrendingDown, Brain, ShieldCheck } from "lucide-react";
-import "./styles.css";
+import React, { useEffect, useMemo, useState } from "react";
+import "./App.css";
 
-function nextCandle(prev, bias = 0) {
-  const open = prev.close;
-  const volatility = 0.8 + Math.random() * 2.4;
-  const direction = (Math.random() - 0.48 + bias) * volatility;
-  const close = Math.max(50, open + direction);
+const assets = ["BTC/USDT", "ETH/USDT", "GOLD", "EUR/USD", "NASDAQ"];
+
+const startPrices = {
+  "BTC/USDT": 68000,
+  "ETH/USDT": 3450,
+  GOLD: 2380,
+  "EUR/USD": 1.086,
+  NASDAQ: 18450,
+};
+
+function makeCandle(prevClose, trend = 1) {
+  const volatility = prevClose * (0.002 + Math.random() * 0.006);
+  const drift = trend * prevClose * (0.0004 + Math.random() * 0.0015);
+  const open = prevClose;
+  const close = Math.max(0.01, open + drift + (Math.random() - 0.5) * volatility);
   const high = Math.max(open, close) + Math.random() * volatility;
   const low = Math.min(open, close) - Math.random() * volatility;
-  return {
-    time: prev.time + 60,
-    open: Number(open.toFixed(2)),
-    high: Number(high.toFixed(2)),
-    low: Number(low.toFixed(2)),
-    close: Number(close.toFixed(2)),
-  };
+  return { open, high, low, close };
 }
 
-function makeInitialCandles() {
-  const candles = [];
-  let candle = { time: Math.floor(Date.now() / 1000) - 60 * 80, open: 100, high: 101, low: 99, close: 100 };
-  for (let i = 0; i < 80; i++) {
-    candle = nextCandle(candle, Math.sin(i / 9) * 0.05);
-    candles.push(candle);
-  }
-  return candles;
-}
-
-function analyzeTrade(side, entry, current) {
-  const diff = side === "BUY" ? current - entry : entry - current;
-  const pnl = diff.toFixed(2);
-  const result = diff >= 0 ? "Позиция пока в плюсе" : "Позиция пока в минусе";
-  const psychology = diff >= 0
-    ? "Хороший вход, но не держите сделку без плана выхода."
-    : "Ошибка может быть во входе против импульса или без подтверждения структуры.";
-  return `${result}. PnL: ${pnl}. AI-анализ: проверьте тренд, уровень ликвидности и risk/reward. ${psychology}`;
+function money(n) {
+  return "$" + n.toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
 export default function App() {
-  const chartRef = useRef(null);
-  const candleSeries = useRef(null);
-  const volumeSeries = useRef(null);
-
-  const [candles, setCandles] = useState(makeInitialCandles);
-  const [balance, setBalance] = useState(1000);
-  const [position, setPosition] = useState(null);
-  const [analysis, setAnalysis] = useState("Нажмите BUY или SELL, чтобы открыть учебную сделку.");
   const [lang, setLang] = useState("RU");
+  const [asset, setAsset] = useState("BTC/USDT");
+  const [balance, setBalance] = useState(50000);
+  const [risk, setRisk] = useState(2);
+  const [direction, setDirection] = useState("BUY");
+  const [candles, setCandles] = useState(() => {
+    let arr = [];
+    let price = startPrices["BTC/USDT"];
+    for (let i = 0; i < 38; i++) {
+      const c = makeCandle(price, 1);
+      arr.push(c);
+      price = c.close;
+    }
+    return arr;
+  });
+  const [openPosition, setOpenPosition] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [coach, setCoach] = useState("Выбери направление, оцени рынок и открой учебную сделку.");
+  const [wins, setWins] = useState(0);
+  const [errors, setErrors] = useState(0);
 
-  useEffect(() => {
-    const chart = createChart(chartRef.current, {
-      layout: { background: { color: "#0b1020" }, textColor: "#cbd5e1" },
-      grid: { vertLines: { color: "#172033" }, horzLines: { color: "#172033" } },
-      width: chartRef.current.clientWidth,
-      height: 380,
-      rightPriceScale: { borderColor: "#334155" },
-      timeScale: { borderColor: "#334155" },
-    });
+  const price = candles[candles.length - 1].close;
+  const prev = candles[candles.length - 2].close;
+  const trend = price >= prev ? "Bullish" : "Bearish";
 
-    candleSeries.current = chart.addSeries(CandlestickSeries, {
-      upColor: "#22c55e",
-      downColor: "#ef4444",
-      borderVisible: false,
-      wickUpColor: "#22c55e",
-      wickDownColor: "#ef4444",
-    });
-
-    volumeSeries.current = chart.addSeries(HistogramSeries, {
-      priceFormat: { type: "volume" },
-      priceScaleId: "",
-    });
-
-    candleSeries.current.setData(candles);
-    volumeSeries.current.setData(candles.map(c => ({
-      time: c.time,
-      value: Math.floor(200 + Math.random() * 900),
-      color: c.close >= c.open ? "rgba(34,197,94,.35)" : "rgba(239,68,68,.35)"
-    })));
-
-    const resize = () => chart.applyOptions({ width: chartRef.current.clientWidth });
-    window.addEventListener("resize", resize);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      chart.remove();
-    };
-  }, []);
+  const ai = useMemo(() => {
+    const momentum = candles.slice(-6).filter(c => c.close > c.open).length;
+    const longProb = Math.round(35 + momentum * 8 + Math.random() * 8);
+    const shortProb = 100 - longProb;
+    const confidence = Math.max(longProb, shortProb);
+    return { longProb, shortProb, confidence };
+  }, [candles]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCandles(prev => {
-        const bias = Math.sin(Date.now() / 9000) * 0.06;
-        const newCandle = nextCandle(prev[prev.length - 1], bias);
-        const updated = [...prev.slice(-90), newCandle];
-        candleSeries.current?.update(newCandle);
-        volumeSeries.current?.update({
-          time: newCandle.time,
-          value: Math.floor(200 + Math.random() * 900),
-          color: newCandle.close >= newCandle.open ? "rgba(34,197,94,.35)" : "rgba(239,68,68,.35)"
-        });
-        if (position) {
-          setAnalysis(analyzeTrade(position.side, position.entry, newCandle.close));
-        }
-        return updated;
+      setCandles(prevCandles => {
+        const last = prevCandles[prevCandles.length - 1];
+        const trendForce = openPosition
+          ? openPosition.side === "BUY"
+            ? 1
+            : -1
+          : Math.random() > 0.45
+          ? 1
+          : -1;
+
+        const next = makeCandle(last.close, trendForce);
+        return [...prevCandles.slice(-37), next];
       });
-    }, 1400);
+    }, 1300);
+
     return () => clearInterval(timer);
-  }, [position]);
+  }, [openPosition]);
 
-  const price = candles[candles.length - 1].close;
+  useEffect(() => {
+    if (!openPosition) return;
 
-  function openTrade(side) {
-    setPosition({ side, entry: price });
-    setAnalysis(`Открыта учебная сделка ${side} по цене ${price}. AI ждёт следующие свечи для анализа.`);
+    const pnl =
+      openPosition.side === "BUY"
+        ? ((price - openPosition.entry) / openPosition.entry) * openPosition.size
+        : ((openPosition.entry - price) / openPosition.entry) * openPosition.size;
+
+    if (price >= openPosition.takeProfit && openPosition.side === "BUY") closePosition("TP");
+    if (price <= openPosition.stopLoss && openPosition.side === "BUY") closePosition("SL");
+    if (price <= openPosition.takeProfit && openPosition.side === "SELL") closePosition("TP");
+    if (price >= openPosition.stopLoss && openPosition.side === "SELL") closePosition("SL");
+
+    setOpenPosition(p => (p ? { ...p, pnl } : null));
+  }, [price]);
+
+  function openTrade() {
+    if (openPosition) {
+      setCoach("Сначала закрой текущую позицию. У профессионального трейдера не должно быть хаоса в сделках.");
+      return;
+    }
+
+    const riskMoney = balance * (risk / 100);
+    const size = riskMoney * 20;
+    const stopDistance = price * 0.006;
+    const takeDistance = stopDistance * 2.4;
+
+    const pos = {
+      id: Date.now(),
+      side: direction,
+      asset,
+      entry: price,
+      size,
+      riskMoney,
+      balanceBefore: balance,
+      stopLoss: direction === "BUY" ? price - stopDistance : price + stopDistance,
+      takeProfit: direction === "BUY" ? price + takeDistance : price - takeDistance,
+      pnl: 0,
+      openedAt: new Date().toLocaleTimeString(),
+    };
+
+    setOpenPosition(pos);
+
+    setCoach(
+      `AI объяснение: ${direction === "BUY" ? "BUY выбран потому, что импульс и структура рынка поддерживают рост." : "SELL выбран потому, что рынок показывает признаки слабости."} Риск ${risk}% допустим. Вход открыт по ${money(price)}.`
+    );
   }
 
-  function closeTrade() {
-    if (!position) return;
-    const diff = position.side === "BUY" ? price - position.entry : position.entry - price;
-    setBalance(b => Number((b + diff * 10).toFixed(2)));
-    setAnalysis(analyzeTrade(position.side, position.entry, price) + " Сделка закрыта.");
-    setPosition(null);
+  function closePosition(reason = "Manual") {
+    if (!openPosition) return;
+
+    const pnl =
+      openPosition.side === "BUY"
+        ? ((price - openPosition.entry) / openPosition.entry) * openPosition.size
+        : ((openPosition.entry - price) / openPosition.entry) * openPosition.size;
+
+    const newBalance = balance + pnl;
+    const win = pnl >= 0;
+
+    setBalance(newBalance);
+    setWins(w => w + (win ? 1 : 0));
+    setErrors(e => e + (win ? 0 : 1));
+
+    const explanation = win
+      ? `Победа: направление было выбрано правильно. Цена пошла в сторону ${openPosition.side}. Баланс до сделки: ${money(openPosition.balanceBefore)}, после сделки: ${money(newBalance)}. Чистый PnL: ${money(pnl)}.`
+      : `Ошибка: рынок пошёл против позиции. Возможные причины — вход против импульса, ранний вход без подтверждения, слишком высокий риск или игнорирование волатильности. Баланс до сделки: ${money(openPosition.balanceBefore)}, после сделки: ${money(newBalance)}. PnL: ${money(pnl)}.`;
+
+    setCoach(`AI разбор сделки. ${explanation}`);
+
+    setHistory(h => [
+      {
+        ...openPosition,
+        exit: price,
+        pnl,
+        reason,
+        balanceAfter: newBalance,
+        closedAt: new Date().toLocaleTimeString(),
+        explanation,
+      },
+      ...h,
+    ]);
+
+    setOpenPosition(null);
+  }
+
+  function candleChart() {
+    const max = Math.max(...candles.map(c => c.high));
+    const min = Math.min(...candles.map(c => c.low));
+    const height = 260;
+
+    return (
+      <div className="chart">
+        {candles.map((c, i) => {
+          const up = c.close >= c.open;
+          const top = ((max - c.high) / (max - min)) * height;
+          const bottom = ((max - c.low) / (max - min)) * height;
+          const bodyTop = ((max - Math.max(c.open, c.close)) / (max - min)) * height;
+          const bodyBottom = ((max - Math.min(c.open, c.close)) / (max - min)) * height;
+
+          return (
+            <div className="candleBox" key={i}>
+              <div
+                className="wick"
+                style={{
+                  top,
+                  height: Math.max(4, bottom - top),
+                }}
+              />
+              <div
+                className={up ? "body up" : "body down"}
+                style={{
+                  top: bodyTop,
+                  height: Math.max(6, bodyBottom - bodyTop),
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 
   return (
-    <main className="app">
-      <section className="hero">
+    <div className="app">
+      <header>
         <div>
-          <p className="badge"><ShieldCheck size={16}/> Training only · No real money gambling</p>
-          <h1>AncientTrade AI</h1>
-          <p className="subtitle">AI Trading Simulator для Telegram Mini App</p>
+          <div className="logo">𓂀 Ancient Trade AI</div>
+          <p>AI-симулятор трейдинга · обучение без реальных денег</p>
         </div>
-        <select value={lang} onChange={e => setLang(e.target.value)}>
-          <option>RU</option>
-          <option>EN</option>
-          <option>KA</option>
-        </select>
+        <div className="langs">
+          {["RU", "EN", "KA"].map(l => (
+            <button key={l} onClick={() => setLang(l)} className={lang === l ? "active" : ""}>
+              {l}
+            </button>
+          ))}
+        </div>
+      </header>
+
+      <section className="grid">
+        <div className="card balance">
+          <span>ДЕМО БАЛАНС</span>
+          <h1>{money(balance)}</h1>
+          <p>Начальный капитал: $50,000</p>
+          <div className="stats">
+            <b>{wins}</b><span>Победы</span>
+            <b>{errors}</b><span>Ошибки</span>
+            <b>{wins + errors ? Math.round((wins / (wins + errors)) * 100) : 0}%</b><span>Точность</span>
+          </div>
+        </div>
+
+        <div className="card market">
+          <div className="marketTop">
+            <div>
+              <h2>{asset}</h2>
+              <p>Тренд: {trend} · AI confidence {ai.confidence}%</p>
+            </div>
+            <h2>{money(price)}</h2>
+          </div>
+          {candleChart()}
+        </div>
+
+        <div className="card trade">
+          <h2>Панель сделки</h2>
+
+          <label>Актив</label>
+          <select value={asset} onChange={e => setAsset(e.target.value)}>
+            {assets.map(a => <option key={a}>{a}</option>)}
+          </select>
+
+          <label>Направление</label>
+          <div className="row">
+            <button onClick={() => setDirection("BUY")} className={direction === "BUY" ? "buy activeBtn" : "buy"}>BUY</button>
+            <button onClick={() => setDirection("SELL")} className={direction === "SELL" ? "sell activeBtn" : "sell"}>SELL</button>
+          </div>
+
+          <label>Риск: {risk}%</label>
+          <input type="range" min="1" max="10" value={risk} onChange={e => setRisk(Number(e.target.value))} />
+
+          <div className="prob">
+            <span>LONG вероятность: {ai.longProb}%</span>
+            <span>SHORT вероятность: {ai.shortProb}%</span>
+          </div>
+
+          <button className="mainBtn" onClick={openTrade}>Открыть позицию</button>
+
+          {openPosition && (
+            <div className="position">
+              <h3>Открытая позиция</h3>
+              <p>{openPosition.side} {openPosition.asset}</p>
+              <p>Вход: {money(openPosition.entry)}</p>
+              <p>Текущая цена: {money(price)}</p>
+              <p>Take Profit: {money(openPosition.takeProfit)}</p>
+              <p>Stop Loss: {money(openPosition.stopLoss)}</p>
+              <h2 className={openPosition.pnl >= 0 ? "green" : "red"}>
+                PnL: {money(openPosition.pnl)}
+              </h2>
+              <button className="closeBtn" onClick={() => closePosition("Manual")}>Закрыть позицию</button>
+            </div>
+          )}
+        </div>
       </section>
 
-      <section className="stats">
-        <div><span>Balance</span><b>${balance}</b></div>
-        <div><span>Price</span><b>{price}</b></div>
-        <div><span>Position</span><b>{position ? `${position.side} @ ${position.entry}` : "None"}</b></div>
-      </section>
+      <section className="grid2">
+        <div className="card">
+          <h2>AI Тренер</h2>
+          <p className="coach">{coach}</p>
+          <ul>
+            <li>Покупка = ставка на рост цены.</li>
+            <li>Продажа = ставка на падение цены.</li>
+            <li>PnL показывает прибыль или убыток текущей позиции.</li>
+            <li>Take Profit закрывает сделку с прибылью.</li>
+            <li>Stop Loss ограничивает убыток.</li>
+          </ul>
+        </div>
 
-      <section className="terminal">
-        <div ref={chartRef} className="chart" />
+        <div className="card">
+          <h2>История BUY / SELL</h2>
+          {history.length === 0 && <p>Сделок пока нет.</p>}
+          {history.map(t => (
+            <div className="history" key={t.id}>
+              <b>{t.side} {t.asset}</b>
+              <span>{t.openedAt} → {t.closedAt}</span>
+              <p>Вход: {money(t.entry)} · Выход: {money(t.exit)}</p>
+              <p>Баланс: {money(t.balanceBefore)} → {money(t.balanceAfter)}</p>
+              <h3 className={t.pnl >= 0 ? "green" : "red"}>{money(t.pnl)} · {t.reason}</h3>
+              <small>{t.explanation}</small>
+            </div>
+          ))}
+        </div>
       </section>
-
-      <section className="actions">
-        <button className="buy" onClick={() => openTrade("BUY")}><TrendingUp/> BUY</button>
-        <button className="sell" onClick={() => openTrade("SELL")}><TrendingDown/> SELL</button>
-        <button className="close" onClick={closeTrade}>CLOSE</button>
-      </section>
-
-      <section className="ai">
-        <h2><Brain/> AI Analysis</h2>
-        <p>{analysis}</p>
-      </section>
-    </main>
+    </div>
   );
 }
