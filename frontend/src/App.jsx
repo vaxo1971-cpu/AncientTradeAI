@@ -9,313 +9,227 @@ const assets = [
   { symbol: "NASDAQ", name: "Nasdaq Index", price: 18450, volatility: 0.026 },
 ];
 
-const ranks = ["Bronze Trader", "Silver Trader", "Gold Trader", "AI Hunter", "Ancient Oracle"];
-
-const text = {
-  ru: {
-    title: "Ancient Trade AI",
-    subtitle: "AI-симулятор трейдинга",
-    balance: "ДЕМО БАЛАНС",
-    disclaimer: "Только учебный симулятор. Без депозитов, вывода средств и реального gambling.",
-    hero: "Тренируй сделки как профессиональный трейдер.",
-    heroText: "Живой рынок, AI-анализ, риск-менеджмент, психология и миссии — без реальных денег.",
-    wins: "Победы",
-    losses: "Ошибки",
-    accuracy: "Точность",
-    drawdown: "Просадка",
-    aiScore: "AI оценка",
-    market: "Актив",
-    direction: "Направление",
-    risk: "Риск",
-    execute: "Симулировать сделку",
-    aiAnalysis: "AI анализ",
-    aiCoach: "AI Тренер",
-    longProb: "LONG вероятность",
-    shortProb: "SHORT вероятность",
-    confidence: "Уверенность",
-    entry: "Вход",
-    stop: "Стоп",
-    target: "Цель",
-    rr: "Risk / Reward",
-    trend: "Тренд",
-    volatility: "Волатильность",
-    volume: "Объем",
-    liquidity: "Ликвидность",
-    spread: "Спред",
-    slippage: "Проскальзывание",
-    news: "Новость",
-    whale: "Whale activity",
-    tutorial: "Быстрый старт",
-    tutorialText: "1) Выбери актив. 2) Оцени тренд и AI-сигналы. 3) Держи риск 1–3%. 4) Выбери BUY/SELL. 5) Изучи разбор сделки.",
-    mission: "Миссия",
-    journal: "Журнал сделок",
-    empty: "Сделок пока нет.",
-    buy: "BUY",
-    sell: "SELL",
-    training: "Учебный режим",
-    riskGood: "Хороший учебный риск.",
-    riskBad: "Высокий риск. Для обучения лучше 1–3%.",
-    winCoach: "Хорошая дисциплина: вход соответствовал структуре рынка и риск был под контролем.",
-    lossCoach: "Ошибка полезна: проверь вход против тренда, размер риска и отсутствие подтверждения.",
-    waitCoach: "Не каждый сигнал нужно торговать. Иногда лучший трейд — это пропуск.",
-  },
-  en: {
-    title: "Ancient Trade AI",
-    subtitle: "AI trading simulator",
-    balance: "DEMO BALANCE",
-    disclaimer: "Educational simulator only. No deposits, no withdrawals, no real gambling.",
-    hero: "Train like a professional trader.",
-    heroText: "Live-style market, AI analysis, risk management, psychology and missions — without real money.",
-    wins: "Wins",
-    losses: "Mistakes",
-    accuracy: "Accuracy",
-    drawdown: "Drawdown",
-    aiScore: "AI score",
-    market: "Asset",
-    direction: "Direction",
-    risk: "Risk",
-    execute: "Execute Simulation",
-    aiAnalysis: "AI Analysis",
-    aiCoach: "AI Coach",
-    longProb: "LONG probability",
-    shortProb: "SHORT probability",
-    confidence: "Confidence",
-    entry: "Entry",
-    stop: "Stop",
-    target: "Target",
-    rr: "Risk / Reward",
-    trend: "Trend",
-    volatility: "Volatility",
-    volume: "Volume",
-    liquidity: "Liquidity",
-    spread: "Spread",
-    slippage: "Slippage",
-    news: "News",
-    whale: "Whale activity",
-    tutorial: "Quick Start",
-    tutorialText: "1) Choose an asset. 2) Read trend and AI signals. 3) Keep risk at 1–3%. 4) Pick BUY/SELL. 5) Study the trade review.",
-    mission: "Mission",
-    journal: "Trade Journal",
-    empty: "No trades yet.",
-    buy: "BUY",
-    sell: "SELL",
-    training: "Training mode",
-    riskGood: "Good training risk.",
-    riskBad: "High risk. For training, 1–3% is better.",
-    winCoach: "Good discipline: your entry matched market structure and risk stayed controlled.",
-    lossCoach: "Useful mistake: review trend direction, risk size and confirmation quality.",
-    waitCoach: "Not every signal should be traded. Sometimes the best trade is no trade.",
-  },
-  ka: {
-    title: "Ancient Trade AI",
-    subtitle: "AI სავაჭრო სიმულატორი",
-    balance: "დემო ბალანსი",
-    disclaimer: "მხოლოდ სასწავლო სიმულატორია. დეპოზიტი, თანხის გატანა და რეალური gambling არ არსებობს.",
-    hero: "ივარჯიშე პროფესიონალი ტრეიდერივით.",
-    heroText: "ცოცხალი ბაზრის სტილი, AI ანალიზი, რისკის კონტროლი, ფსიქოლოგია და მისიები — რეალური ფულის გარეშე.",
-    wins: "მოგება",
-    losses: "შეცდომა",
-    accuracy: "სიზუსტე",
-    drawdown: "ვარდნა",
-    aiScore: "AI შეფასება",
-    market: "აქტივი",
-    direction: "მიმართულება",
-    risk: "რისკი",
-    execute: "სიმულაციური გარიგება",
-    aiAnalysis: "AI ანალიზი",
-    aiCoach: "AI მწვრთნელი",
-    longProb: "LONG ალბათობა",
-    shortProb: "SHORT ალბათობა",
-    confidence: "დაჯერებულობა",
-    entry: "შესვლა",
-    stop: "სტოპი",
-    target: "სამიზნე",
-    rr: "რისკი / მოგება",
-    trend: "ტრენდი",
-    volatility: "ვოლატილობა",
-    volume: "მოცულობა",
-    liquidity: "ლიკვიდობა",
-    spread: "სპრედი",
-    slippage: "სლიპეჯი",
-    news: "სიახლე",
-    whale: "Whale activity",
-    tutorial: "სწრაფი ინსტრუქცია",
-    tutorialText: "1) აირჩიე აქტივი. 2) წაიკითხე ტრენდი და AI სიგნალები. 3) შეინარჩუნე რისკი 1–3%. 4) აირჩიე BUY/SELL. 5) შეისწავლე შედეგი.",
-    mission: "მისია",
-    journal: "გარიგებების ჟურნალი",
-    empty: "გარიგებები ჯერ არ არის.",
-    buy: "BUY",
-    sell: "SELL",
-    training: "სასწავლო რეჟიმი",
-    riskGood: "კარგი სასწავლო რისკი.",
-    riskBad: "მაღალი რისკია. სწავლისთვის სჯობს 1–3%.",
-    winCoach: "კარგი დისციპლინა: შესვლა დაემთხვა ბაზრის სტრუქტურას და რისკი კონტროლში იყო.",
-    lossCoach: "სასარგებლო შეცდომა: შეამოწმე ტრენდი, რისკის ზომა და დადასტურება.",
-    waitCoach: "ყველა სიგნალი სავაჭრო არ არის. ზოგჯერ საუკეთესო გარიგება არის არშესვლა.",
-  },
-};
-
-function seededRandom(seed, i) {
-  const x = Math.sin(seed * 917 + i * 131.7) * 10000;
-  return x - Math.floor(x);
+function money(n) {
+  return "$" + Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
-function formatPrice(asset, value) {
-  if (asset.symbol === "EUR/USD") return value.toFixed(4);
-  return `$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
-}
-
-function generateCandles(asset, seed, tick) {
-  let price = asset.price * (1 + Math.sin(seed + tick / 8) * asset.volatility * 0.8);
-  return Array.from({ length: 48 }, (_, i) => {
-    const wave = Math.sin((i + seed + tick / 10) * 0.34) * asset.volatility;
-    const impulse = Math.cos((i + tick) * 0.71) * asset.volatility * 0.55;
-    const noise = (seededRandom(seed + tick / 13, i) - 0.5) * asset.volatility * 0.9;
-    const open = price;
-    const close = price * (1 + wave * 0.12 + impulse * 0.1 + noise);
-    const high = Math.max(open, close) * (1 + seededRandom(seed + 4, i) * asset.volatility * 0.45);
-    const low = Math.min(open, close) * (1 - seededRandom(seed + 9, i) * asset.volatility * 0.45);
-    const volume = 18 + seededRandom(seed + 14, i + tick) * 90;
-    price = close;
-    return { id: i, open, close, high, low, volume, green: close >= open };
-  });
-}
-
-function normalize(candles) {
-  const max = Math.max(...candles.map((c) => c.high));
-  const min = Math.min(...candles.map((c) => c.low));
-  const range = max - min || 1;
-  return candles.map((c) => {
-    const top = ((max - c.high) / range) * 100;
-    const bottom = ((c.low - min) / range) * 100;
-    const bodyTop = ((max - Math.max(c.open, c.close)) / range) * 100;
-    const bodyBottom = ((Math.min(c.open, c.close) - min) / range) * 100;
-    return {
-      ...c,
-      wickTop: top,
-      wickHeight: Math.max(8, 100 - top - bottom),
-      bodyTop,
-      bodyHeight: Math.max(7, 100 - bodyTop - bodyBottom),
-      volumeHeight: Math.max(12, Math.min(96, c.volume)),
-    };
-  });
-}
-
-function metrics(candles) {
-  const first = candles[0];
-  const last = candles[candles.length - 1];
-  const trendValue = ((last.close - first.open) / first.open) * 100;
-  const avgVolume = candles.reduce((s, c) => s + c.volume, 0) / candles.length;
-  const volatility = candles.reduce((s, c) => s + Math.abs(c.close - c.open) / c.open, 0) / candles.length;
-  return {
-    trendValue,
-    trend: trendValue >= 0 ? "Bullish" : "Bearish",
-    volume: Math.round(avgVolume),
-    volatility: Math.round(volatility * 10000) / 100,
-    liquidity: Math.min(98, Math.round(62 + avgVolume / 3)),
-  };
+function makeCandle(prev, volatility, bias = 0) {
+  const move = prev * (Math.random() - 0.48 + bias) * volatility * 0.12;
+  const open = prev;
+  const close = Math.max(0.01, prev + move);
+  const high = Math.max(open, close) + prev * Math.random() * volatility * 0.045;
+  const low = Math.min(open, close) - prev * Math.random() * volatility * 0.045;
+  return { open, close, high, low };
 }
 
 export default function App() {
-  const [lang, setLang] = useState("ru");
+  const [lang, setLang] = useState("RU");
   const [asset, setAsset] = useState(assets[0]);
-  const [direction, setDirection] = useState("BUY");
-  const [risk, setRisk] = useState(2);
   const [balance, setBalance] = useState(50000);
-  const [peak, setPeak] = useState(50000);
-  const [trades, setTrades] = useState([]);
-  const [seed, setSeed] = useState(22);
-  const [tick, setTick] = useState(0);
-  const [coach, setCoach] = useState("");
+  const [risk, setRisk] = useState(2);
+  const [side, setSide] = useState("BUY");
+  const [candles, setCandles] = useState(() => {
+    let price = assets[0].price;
+    return Array.from({ length: 42 }, () => {
+      const c = makeCandle(price, assets[0].volatility);
+      price = c.close;
+      return c;
+    });
+  });
+  const [position, setPosition] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [coach, setCoach] = useState(
+    "Баланс меняется только после закрытия сделки. Во время открытой позиции меняется только PnL."
+  );
 
-  const t = text[lang];
+  const price = candles[candles.length - 1].close;
+  const prevPrice = candles[candles.length - 2].close;
+  const trend = price >= prevPrice ? "Bullish" : "Bearish";
 
-  useEffect(() => {
-    const timer = setInterval(() => setTick((v) => v + 1), 1200);
-    return () => clearInterval(timer);
-  }, []);
-
-  const candles = useMemo(() => normalize(generateCandles(asset, seed, tick)), [asset, seed, tick]);
-  const rawCandles = useMemo(() => generateCandles(asset, seed, tick), [asset, seed, tick]);
-  const m = useMemo(() => metrics(rawCandles), [rawCandles]);
-  const last = rawCandles[rawCandles.length - 1];
-  const prev = rawCandles[rawCandles.length - 2];
-  const priceUp = last.close >= prev.close;
+  const currentPnl = useMemo(() => {
+    if (!position) return 0;
+    if (position.side === "BUY") {
+      return ((price - position.entry) / position.entry) * position.size;
+    }
+    return ((position.entry - price) / position.entry) * position.size;
+  }, [position, price]);
 
   const ai = useMemo(() => {
-    const trendAligned = (m.trendValue >= 0 && direction === "BUY") || (m.trendValue < 0 && direction === "SELL");
-    const riskPenalty = risk > 3 ? (risk - 3) * 4 : 0;
-    const confidence = Math.max(38, Math.min(93, Math.round((trendAligned ? 72 : 55) + m.liquidity / 9 - riskPenalty)));
-    const longProb = Math.max(18, Math.min(82, Math.round(50 + m.trendValue * 3 + (priceUp ? 8 : -5))));
+    const last = candles.slice(-8);
+    const green = last.filter(c => c.close > c.open).length;
+    const longProb = Math.min(82, Math.max(18, Math.round(34 + green * 7 + Math.random() * 8)));
     const shortProb = 100 - longProb;
-    const entry = last.close;
-    const spread = entry * (0.0003 + asset.volatility * 0.015);
-    const slippage = entry * (risk / 10000) * (asset.volatility * 18);
-    const stop = direction === "BUY" ? entry * (1 - 0.012 - risk / 900) : entry * (1 + 0.012 + risk / 900);
-    const target = direction === "BUY" ? entry * (1 + 0.028 + confidence / 4200) : entry * (1 - 0.028 - confidence / 4200);
-    const rr = (Math.abs(target - entry) / Math.abs(entry - stop)).toFixed(2);
-    const signals = [
-      confidence > 76 ? "Liquidity sweep detected" : "Structure still forming",
-      m.volume > 55 ? "Volume confirmation" : "Low-volume caution",
-      Math.abs(m.trendValue) > 1.2 ? "Momentum active" : "Range market",
-      seededRandom(seed, tick) > 0.62 ? "Whale order imbalance" : "No major whale signal",
-    ];
-    return { confidence, longProb, shortProb, entry, stop, target, rr, spread, slippage, signals };
-  }, [asset, direction, last.close, m, priceUp, risk, seed, tick]);
+    const confidence = Math.max(longProb, shortProb);
+    return { longProb, shortProb, confidence };
+  }, [candles]);
 
-  const wins = trades.filter((x) => x.pnl > 0).length;
-  const losses = trades.filter((x) => x.pnl < 0).length;
-  const accuracy = trades.length ? Math.round((wins / trades.length) * 100) : 0;
-  const drawdown = Math.max(0, Math.round(((peak - balance) / peak) * 1000) / 10);
-  const level = Math.max(1, Math.min(5, Math.floor((balance - 50000) / 3500) + 1 + Math.floor(trades.length / 8)));
-  const rank = ranks[level - 1] || ranks[ranks.length - 1];
-  const xp = Math.min(100, Math.round(((balance - 50000 + trades.length * 420) % 3500) / 35));
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCandles(old => {
+        const last = old[old.length - 1];
+        const bias = position ? (position.side === "BUY" ? 0.015 : -0.015) : 0;
+        const next = makeCandle(last.close, asset.volatility, bias);
+        return [...old.slice(-41), next];
+      });
+    }, 1200);
 
-  function executeTrade() {
-    const chance = Math.max(0.28, Math.min(0.74, ai.confidence / 100 - risk * 0.018));
-    const win = Math.random() < chance;
-    const riskAmount = Math.round(balance * (risk / 100));
-    const pnl = win ? Math.round(riskAmount * (0.75 + Math.random() * 1.55)) : -Math.round(riskAmount * (0.65 + Math.random() * 0.75));
-    const nextBalance = Math.max(1000, balance + pnl);
-    setBalance(nextBalance);
-    setPeak((p) => Math.max(p, nextBalance));
-    setTrades((old) => [
-      {
-        id: Date.now(),
-        asset: asset.symbol,
-        direction,
-        pnl,
-        risk,
-        confidence: ai.confidence,
-        reason: win ? t.winCoach : t.lossCoach,
-      },
-      ...old.slice(0, 11),
-    ]);
-    setCoach(win ? t.winCoach : t.lossCoach);
-    setSeed((s) => s + 1.7);
+    return () => clearInterval(timer);
+  }, [asset, position]);
+
+  useEffect(() => {
+    if (!position) return;
+
+    if (position.side === "BUY") {
+      if (price >= position.takeProfit) closePosition("Take Profit");
+      if (price <= position.stopLoss) closePosition("Stop Loss");
+    } else {
+      if (price <= position.takeProfit) closePosition("Take Profit");
+      if (price >= position.stopLoss) closePosition("Stop Loss");
+    }
+  }, [price]);
+
+  function changeAsset(symbol) {
+    const selected = assets.find(a => a.symbol === symbol);
+    setAsset(selected);
+
+    let p = selected.price;
+    setCandles(
+      Array.from({ length: 42 }, () => {
+        const c = makeCandle(p, selected.volatility);
+        p = c.close;
+        return c;
+      })
+    );
+    setPosition(null);
+    setCoach("Актив изменён. Оцени рынок заново перед входом.");
   }
 
-  const displayPrice = formatPrice(asset, last.close);
-  const mission = risk <= 3 ? "Keep risk controlled and complete 5 disciplined entries" : "Reduce risk below 3% before scaling";
+  function openPosition() {
+    if (position) {
+      setCoach("Сначала закрой открытую позицию. Баланс не должен меняться до закрытия сделки.");
+      return;
+    }
+
+    const riskMoney = balance * (risk / 100);
+    const size = riskMoney * 20;
+    const stopDistance = price * 0.0065;
+    const takeDistance = stopDistance * 2.4;
+
+    const newPosition = {
+      id: Date.now(),
+      asset: asset.symbol,
+      side,
+      entry: price,
+      size,
+      riskMoney,
+      balanceBefore: balance,
+      stopLoss: side === "BUY" ? price - stopDistance : price + stopDistance,
+      takeProfit: side === "BUY" ? price + takeDistance : price - takeDistance,
+      openedAt: new Date().toLocaleTimeString(),
+    };
+
+    setPosition(newPosition);
+    setCoach(
+      `${side} открыт по ${money(price)}. Баланс пока НЕ изменился. Сейчас меняется только текущий PnL. Баланс изменится только после закрытия позиции.`
+    );
+  }
+
+  function closePosition(reason = "Manual Close") {
+    if (!position) return;
+
+    const pnl =
+      position.side === "BUY"
+        ? ((price - position.entry) / position.entry) * position.size
+        : ((position.entry - price) / position.entry) * position.size;
+
+    const newBalance = balance + pnl;
+
+    const explanation =
+      pnl >= 0
+        ? `Сделка закрыта с прибылью. Направление было выбрано верно, рынок пошёл в сторону позиции. Баланс: ${money(position.balanceBefore)} → ${money(newBalance)}.`
+        : `Сделка закрыта с убытком. Ошибка могла быть во входе против импульса, слишком раннем входе или недостаточном подтверждении. Баланс: ${money(position.balanceBefore)} → ${money(newBalance)}.`;
+
+    setBalance(newBalance);
+    setHistory(h => [
+      {
+        ...position,
+        exit: price,
+        pnl,
+        reason,
+        balanceAfter: newBalance,
+        closedAt: new Date().toLocaleTimeString(),
+        explanation,
+      },
+      ...h,
+    ]);
+
+    setCoach(`AI разбор: ${explanation}`);
+    setPosition(null);
+  }
+
+  function chart() {
+    const max = Math.max(...candles.map(c => c.high), position?.takeProfit || 0, position?.stopLoss || 0);
+    const min = Math.min(...candles.map(c => c.low), position?.takeProfit || Infinity, position?.stopLoss || Infinity);
+    const h = 320;
+
+    const lineTop = value => ((max - value) / (max - min)) * h;
+
+    return (
+      <div className="chart">
+        {position && (
+          <>
+            <div className="tpLine" style={{ top: lineTop(position.takeProfit) }}>
+              TP {money(position.takeProfit)}
+            </div>
+            <div className="slLine" style={{ top: lineTop(position.stopLoss) }}>
+              SL {money(position.stopLoss)}
+            </div>
+            <div className="entryLine" style={{ top: lineTop(position.entry) }}>
+              ENTRY {money(position.entry)}
+            </div>
+          </>
+        )}
+
+        {candles.map((c, i) => {
+          const up = c.close >= c.open;
+          const wickTop = ((max - c.high) / (max - min)) * h;
+          const wickBottom = ((max - c.low) / (max - min)) * h;
+          const bodyTop = ((max - Math.max(c.open, c.close)) / (max - min)) * h;
+          const bodyBottom = ((max - Math.min(c.open, c.close)) / (max - min)) * h;
+
+          return (
+            <div className="candleBox" key={i}>
+              <div className="wick" style={{ top: wickTop, height: wickBottom - wickTop }} />
+              <div
+                className={up ? "body up" : "body down"}
+                style={{ top: bodyTop, height: Math.max(7, bodyBottom - bodyTop) }}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  const wins = history.filter(h => h.pnl >= 0).length;
+  const losses = history.filter(h => h.pnl < 0).length;
+  const accuracy = history.length ? Math.round((wins / history.length) * 100) : 0;
 
   return (
-    <main className="app">
-      <div className="orb orb-one" />
-      <div className="orb orb-two" />
+    <div className="app">
+      <div className="ancientGlow" />
 
-      <header className="topbar">
-        <div className="brand">
+      <header className="top">
+        <div>
           <div className="eye">𓂀</div>
-          <div>
-            <h1>{t.title}</h1>
-            <p>{t.subtitle}</p>
-          </div>
+          <h1>Ancient Trade AI</h1>
+          <p>Premium AI Trading Simulator · no real money · training only</p>
         </div>
 
-        <div className="language">
-          {["ru", "en", "ka"].map((code) => (
-            <button key={code} className={lang === code ? "active" : ""} onClick={() => setLang(code)}>
-              {code.toUpperCase()}
+        <div className="langs">
+          {["RU", "EN", "KA"].map(l => (
+            <button key={l} className={lang === l ? "active" : ""} onClick={() => setLang(l)}>
+              {l}
             </button>
           ))}
         </div>
@@ -323,137 +237,129 @@ export default function App() {
 
       <section className="hero">
         <div>
-          <span className="pill">{t.training}</span>
-          <h2>{t.hero}</h2>
-          <p>{t.heroText}</p>
-          <small>{t.disclaimer}</small>
+          <span className="badge">Учебный режим</span>
+          <h2>Торгуй как в реальном терминале, но без риска реальных денег.</h2>
+          <p>
+            Баланс фиксированный до закрытия сделки. Открытая позиция показывает только плавающий PnL.
+            После закрытия AI объясняет победу или ошибку.
+          </p>
         </div>
 
-        <div className="balance-card">
-          <span>{t.balance}</span>
-          <strong>${balance.toLocaleString()}</strong>
-          <div className="rank">{rank}</div>
-          <div className="xp"><span style={{ width: `${xp}%` }} /></div>
+        <div className="balanceCard">
+          <span>ДЕМО БАЛАНС</span>
+          <strong>{money(balance)}</strong>
+          <small>Баланс меняется только после закрытия сделки</small>
         </div>
       </section>
 
-      <section className="stats">
-        <div><strong>{wins}</strong><span>{t.wins}</span></div>
-        <div><strong>{losses}</strong><span>{t.losses}</span></div>
-        <div><strong>{accuracy}%</strong><span>{t.accuracy}</span></div>
-        <div><strong>{drawdown}%</strong><span>{t.drawdown}</span></div>
-        <div><strong>{ai.confidence}%</strong><span>{t.aiScore}</span></div>
-      </section>
+      <main className="terminal">
+        <section className="leftPanel panel">
+          <h3>Trader Profile</h3>
+          <div className="metric"><span>Победы</span><b>{wins}</b></div>
+          <div className="metric"><span>Ошибки</span><b>{losses}</b></div>
+          <div className="metric"><span>Точность</span><b>{accuracy}%</b></div>
+          <div className="metric"><span>AI оценка</span><b>{ai.confidence}%</b></div>
 
-      <section className="terminal">
-        <div className="chart-card">
-          <div className="chart-head">
+          <div className="coachBox">
+            <h3>AI Тренер</h3>
+            <p>{coach}</p>
+          </div>
+        </section>
+
+        <section className="marketPanel panel">
+          <div className="marketHead">
             <div>
-              <h3>{asset.symbol}</h3>
-              <p>{asset.name} · AI market depth</p>
+              <h2>{asset.symbol}</h2>
+              <p>{asset.name} · Trend: {trend}</p>
             </div>
-            <div className={priceUp ? "price up" : "price down"}>{displayPrice}</div>
+            <div className="livePrice">{money(price)}</div>
           </div>
 
-          <div className="market-grid">
-            <span>{t.trend}: <b>{m.trend}</b></span>
-            <span>{t.volatility}: <b>{m.volatility}%</b></span>
-            <span>{t.volume}: <b>{m.volume}</b></span>
-            <span>{t.liquidity}: <b>{m.liquidity}%</b></span>
-          </div>
+          {chart()}
 
-          <div className="chart">
-            <div className="price-line">{displayPrice}</div>
-            {candles.map((c) => (
-              <div className="candle-wrap" key={c.id}>
-                <span className={c.green ? "wick green" : "wick red"} style={{ top: `${c.wickTop}%`, height: `${c.wickHeight}%` }} />
-                <span className={c.green ? "body green" : "body red"} style={{ top: `${c.bodyTop}%`, height: `${c.bodyHeight}%` }} />
-              </div>
+          {position && (
+            <div className="floatingPnl">
+              <span>{position.side} OPEN</span>
+              <b className={currentPnl >= 0 ? "green" : "red"}>{money(currentPnl)}</b>
+              <small>Плавающий PnL · баланс пока не изменён</small>
+            </div>
+          )}
+        </section>
+
+        <section className="tradePanel panel">
+          <h3>AI Trade Console</h3>
+
+          <label>Актив</label>
+          <select value={asset.symbol} onChange={e => changeAsset(e.target.value)}>
+            {assets.map(a => (
+              <option key={a.symbol}>{a.symbol}</option>
             ))}
-          </div>
-
-          <div className="volumes">
-            {candles.map((c) => (
-              <span key={c.id} className={c.green ? "green" : "red"} style={{ height: `${c.volumeHeight}%` }} />
-            ))}
-          </div>
-        </div>
-
-        <aside className="panel">
-          <h3>{t.aiAnalysis}</h3>
-
-          <label>{t.market}</label>
-          <select value={asset.symbol} onChange={(e) => {
-            setAsset(assets.find((a) => a.symbol === e.target.value) || assets[0]);
-            setSeed((s) => s + 2);
-          }}>
-            {assets.map((a) => <option key={a.symbol}>{a.symbol}</option>)}
           </select>
 
-          <label>{t.direction}</label>
-          <div className="side-buttons">
-            <button className={direction === "BUY" ? "buy selected" : "buy"} onClick={() => setDirection("BUY")}>{t.buy}</button>
-            <button className={direction === "SELL" ? "sell selected" : "sell"} onClick={() => setDirection("SELL")}>{t.sell}</button>
+          <label>Направление</label>
+          <div className="sideButtons">
+            <button onClick={() => setSide("BUY")} className={side === "BUY" ? "buy activeSide" : "buy"}>
+              BUY
+            </button>
+            <button onClick={() => setSide("SELL")} className={side === "SELL" ? "sell activeSide" : "sell"}>
+              SELL
+            </button>
           </div>
 
-          <label>{t.risk}: {risk}%</label>
-          <input type="range" min="1" max="8" value={risk} onChange={(e) => setRisk(Number(e.target.value))} />
-          <p className={risk > 3 ? "risk danger" : "risk safe"}>{risk > 3 ? t.riskBad : t.riskGood}</p>
+          <label>Риск: {risk}%</label>
+          <input type="range" min="1" max="10" value={risk} onChange={e => setRisk(Number(e.target.value))} />
 
-          <button className="execute" onClick={executeTrade}>{t.execute}</button>
-        </aside>
-      </section>
+          <div className="aiStats">
+            <div><span>LONG</span><b>{ai.longProb}%</b></div>
+            <div><span>SHORT</span><b>{ai.shortProb}%</b></div>
+            <div><span>CONFIDENCE</span><b>{ai.confidence}%</b></div>
+          </div>
 
-      <section className="ai-grid">
-        <div className="glass">
-          <h3>{t.confidence}</h3>
-          <div className="meter"><span style={{ width: `${ai.confidence}%` }} /></div>
-          <b>{ai.confidence}%</b>
-        </div>
-        <div className="glass">
-          <h3>{t.longProb}</h3>
-          <div className="meter"><span style={{ width: `${ai.longProb}%` }} /></div>
-          <b>{ai.longProb}%</b>
-        </div>
-        <div className="glass">
-          <h3>{t.shortProb}</h3>
-          <div className="meter redmeter"><span style={{ width: `${ai.shortProb}%` }} /></div>
-          <b>{ai.shortProb}%</b>
-        </div>
-        <div className="glass">
-          <h3>Market Mechanics</h3>
-          <p>{t.spread}: {formatPrice(asset, ai.spread)}</p>
-          <p>{t.slippage}: {formatPrice(asset, ai.slippage)}</p>
-          <p>{t.rr}: 1:{ai.rr}</p>
-        </div>
-      </section>
+          {!position ? (
+            <button className="openBtn" onClick={openPosition}>
+              OPEN POSITION
+            </button>
+          ) : (
+            <button className="closeBtn" onClick={() => closePosition("Manual Close")}>
+              CLOSE POSITION
+            </button>
+          )}
 
-      <section className="lower">
-        <div className="coach">
-          <h3>{t.aiCoach}</h3>
-          <p>{coach || t.waitCoach}</p>
-          <ul>
-            {ai.signals.map((s) => <li key={s}>{s}</li>)}
-          </ul>
-        </div>
-
-        <div className="coach">
-          <h3>{t.tutorial}</h3>
-          <p>{t.tutorialText}</p>
-          <h3>{t.mission}</h3>
-          <p>{mission}</p>
-        </div>
-
-        <div className="journal">
-          <h3>{t.journal}</h3>
-          {trades.length === 0 ? <p>{t.empty}</p> : trades.map((trade) => (
-            <div className="trade" key={trade.id}>
-              <span>{trade.direction} {trade.asset} · {trade.risk}% · AI {trade.confidence}%</span>
-              <b className={trade.pnl >= 0 ? "positive" : "negative"}>{trade.pnl >= 0 ? "+" : ""}${trade.pnl}</b>
+          {position && (
+            <div className="positionBox">
+              <h3>Открытая позиция</h3>
+              <p>{position.side} · {position.asset}</p>
+              <p>Entry: {money(position.entry)}</p>
+              <p>TP: {money(position.takeProfit)}</p>
+              <p>SL: {money(position.stopLoss)}</p>
+              <p>Balance before: {money(position.balanceBefore)}</p>
+              <h2 className={currentPnl >= 0 ? "green" : "red"}>PnL: {money(currentPnl)}</h2>
             </div>
-          ))}
-        </div>
+          )}
+        </section>
+      </main>
+
+      <section className="journal panel">
+        <h2>Журнал сделок BUY / SELL</h2>
+        {history.length === 0 ? (
+          <p>Сделок пока нет. Открой позицию и закрой её вручную или дождись TP/SL.</p>
+        ) : (
+          history.map(t => (
+            <div className="tradeRow" key={t.id}>
+              <div>
+                <b>{t.side} {t.asset}</b>
+                <span>{t.openedAt} → {t.closedAt} · {t.reason}</span>
+              </div>
+              <div>
+                <p>Entry {money(t.entry)} → Exit {money(t.exit)}</p>
+                <p>Balance {money(t.balanceBefore)} → {money(t.balanceAfter)}</p>
+              </div>
+              <strong className={t.pnl >= 0 ? "green" : "red"}>{money(t.pnl)}</strong>
+              <small>{t.explanation}</small>
+            </div>
+          ))
+        )}
       </section>
-    </main>
+    </div>
   );
 }
