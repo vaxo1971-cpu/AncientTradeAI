@@ -1,6 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function App() {
+  const [balance, setBalance] = useState(1000);
+  const [btcPrice, setBtcPrice] = useState(64250);
+  const [message, setMessage] = useState("AI ожидает сигнал...");
+  const [trades, setTrades] = useState([]);
+
+  function randomPrice() {
+    return Math.floor(Math.random() * 4000 - 2000);
+  }
+
+  function buyTrade() {
+    const move = randomPrice();
+    const newPrice = btcPrice + move;
+    const profit = Math.floor(Math.random() * 120);
+
+    setBtcPrice(newPrice);
+    setBalance(balance + profit);
+
+    setMessage(
+      profit > 50
+        ? "✅ AI успешно открыл BUY позицию"
+        : "⚠️ Рынок нестабилен"
+    );
+
+    setTrades([
+      {
+        type: "BUY",
+        result: "+" + profit + "$",
+      },
+      ...trades,
+    ]);
+  }
+
+  function sellTrade() {
+    const move = randomPrice();
+    const newPrice = btcPrice - move;
+    const loss = Math.floor(Math.random() * 90);
+
+    setBtcPrice(newPrice);
+    setBalance(balance - loss);
+
+    setMessage(
+      loss < 40
+        ? "✅ SELL позиция закрыта"
+        : "❌ Убыточная сделка"
+    );
+
+    setTrades([
+      {
+        type: "SELL",
+        result: "-" + loss + "$",
+      },
+      ...trades,
+    ]);
+  }
+
   return (
     <div
       style={{
@@ -11,37 +66,24 @@ export default function App() {
         padding: "30px",
       }}
     >
-      <h1
-        style={{
-          textAlign: "center",
-          fontSize: "42px",
-          marginBottom: "10px",
-        }}
-      >
+      <h1 style={{ textAlign: "center" }}>
         AncientTrade AI
       </h1>
-
-      <p
-        style={{
-          textAlign: "center",
-          color: "#8fa3c7",
-          marginBottom: "40px",
-        }}
-      >
-        AI Trading Simulator • Crypto Market • Strategy Mode
-      </p>
 
       <div
         style={{
           background: "#111827",
           borderRadius: "20px",
           padding: "30px",
-          maxWidth: "700px",
+          maxWidth: "800px",
           margin: "0 auto",
-          boxShadow: "0 0 25px rgba(0,255,255,0.15)",
         }}
       >
         <h2>BTC / USDT</h2>
+
+        <h3>💰 Balance: ${balance}</h3>
+
+        <h3>₿ BTC Price: ${btcPrice}</h3>
 
         <div
           style={{
@@ -58,34 +100,20 @@ export default function App() {
             fontSize: "24px",
           }}
         >
-          📈 LIVE MARKET CHART
+          📈 LIVE MARKET
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "25px",
-          }}
-        >
-          <div>
-            <p>AI Prediction</p>
-            <h3 style={{ color: "#4ade80" }}>UP TREND</h3>
-          </div>
-
-          <div>
-            <p>Confidence</p>
-            <h3>82%</h3>
-          </div>
-        </div>
+        <p>{message}</p>
 
         <div
           style={{
             display: "flex",
             gap: "15px",
+            marginTop: "20px",
           }}
         >
           <button
+            onClick={buyTrade}
             style={{
               flex: 1,
               padding: "16px",
@@ -94,13 +122,13 @@ export default function App() {
               borderRadius: "14px",
               color: "white",
               fontSize: "18px",
-              cursor: "pointer",
             }}
           >
             BUY
           </button>
 
           <button
+            onClick={sellTrade}
             style={{
               flex: 1,
               padding: "16px",
@@ -109,11 +137,28 @@ export default function App() {
               borderRadius: "14px",
               color: "white",
               fontSize: "18px",
-              cursor: "pointer",
             }}
           >
             SELL
           </button>
+        </div>
+
+        <div style={{ marginTop: "30px" }}>
+          <h3>📜 Trade History</h3>
+
+          {trades.map((trade, index) => (
+            <div
+              key={index}
+              style={{
+                background: "#1f2937",
+                padding: "12px",
+                borderRadius: "10px",
+                marginTop: "10px",
+              }}
+            >
+              {trade.type} → {trade.result}
+            </div>
+          ))}
         </div>
       </div>
     </div>
