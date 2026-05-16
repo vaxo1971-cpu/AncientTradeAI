@@ -4,18 +4,19 @@
 
 body {
   margin: 0;
-  background: #05070b;
-  color: #f4efe2;
+  background: #030509;
+  color: #f6efe1;
   font-family: Inter, Arial, sans-serif;
 }
 
 .game {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 310px 1fr;
   background:
-    radial-gradient(circle at top left, #3a2a10, #05070b 42%),
-    linear-gradient(135deg, #05070b, #0c1416);
+    radial-gradient(circle at 12% 8%, rgba(221, 164, 63, 0.28), transparent 34%),
+    radial-gradient(circle at 88% 12%, rgba(42, 255, 163, 0.1), transparent 30%),
+    linear-gradient(135deg, #030509, #071015 55%, #090603);
 }
 
 button,
@@ -25,9 +26,9 @@ input {
 }
 
 .sidebar {
-  padding: 26px;
-  background: rgba(5, 7, 11, 0.9);
-  border-right: 1px solid rgba(219, 174, 82, 0.18);
+  padding: 28px;
+  background: rgba(4, 6, 10, 0.92);
+  border-right: 1px solid rgba(255, 213, 112, 0.16);
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -40,66 +41,90 @@ input {
 }
 
 .logo span {
-  font-size: 44px;
-  color: #f3c969;
-  text-shadow: 0 0 30px rgba(243, 201, 105, 0.8);
+  font-size: 46px;
+  color: #ffd46d;
+  text-shadow: 0 0 34px rgba(255, 212, 109, 0.85);
 }
 
 .logo h1 {
-  font-size: 22px;
+  font-size: 23px;
   margin: 0;
-  color: #ffd77a;
+  color: #ffd46d;
 }
 
 .logo p,
 .muted {
-  margin: 4px 0 0;
-  color: #8f9aa2;
+  margin: 5px 0 0;
+  color: #99a5ad;
+  line-height: 1.55;
+}
+
+.language-switch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.language-switch button {
+  border: 1px solid rgba(255, 215, 122, 0.16);
+  background: #0b1118;
+  color: #aeb8bd;
+  border-radius: 14px;
+  padding: 11px;
+  cursor: pointer;
+}
+
+.language-switch .lang-on {
+  background: linear-gradient(135deg, #d99a32, #ffe28b);
+  color: #111;
+  font-weight: 900;
 }
 
 .profile-card,
 .card,
 .terminal,
 .hero {
-  background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.025));
   border: 1px solid rgba(255, 215, 122, 0.16);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
-  border-radius: 24px;
-  backdrop-filter: blur(14px);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.48);
+  border-radius: 26px;
+  backdrop-filter: blur(16px);
 }
 
 .profile-card {
-  padding: 18px;
+  padding: 19px;
 }
 
 .profile-card small {
   color: #9aa4a9;
+  letter-spacing: 1.5px;
 }
 
 .profile-card strong {
   display: block;
-  font-size: 34px;
+  font-size: 36px;
   margin: 8px 0;
-  color: #f6d27a;
+  color: #f8d47a;
 }
 
 .xp span {
   font-size: 13px;
-  color: #c8c0a6;
+  color: #d2c7a6;
 }
 
 .xp div {
-  height: 8px;
-  background: #182024;
+  height: 9px;
+  background: #151e25;
   border-radius: 99px;
-  margin-top: 8px;
+  margin-top: 9px;
   overflow: hidden;
 }
 
 .xp i {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #d4922e, #ffe08a);
+  background: linear-gradient(90deg, #c87b22, #ffe28b);
+  box-shadow: 0 0 18px rgba(255, 210, 102, 0.45);
 }
 
 .menu {
@@ -108,52 +133,68 @@ input {
 }
 
 .menu button {
-  padding: 14px;
+  padding: 15px;
   border: 1px solid rgba(255, 215, 122, 0.1);
-  background: #0c1117;
+  background: #0a1016;
   color: #b9c2c9;
-  border-radius: 16px;
+  border-radius: 17px;
   text-align: left;
+  cursor: pointer;
 }
 
 .menu .selected {
-  background: linear-gradient(135deg, #bd842d, #f5d47e);
-  color: #111;
-  font-weight: 800;
+  background: linear-gradient(135deg, #bd842d, #f6d780);
+  color: #101010;
+  font-weight: 900;
 }
 
 .disclaimer {
   margin-top: auto;
-  padding: 15px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 19px;
   background: rgba(255, 200, 80, 0.08);
-  color: #e5c56d;
+  color: #e6c872;
   font-size: 13px;
+  line-height: 1.55;
 }
 
 .dashboard {
-  padding: 28px;
+  padding: 30px;
   display: grid;
-  gap: 22px;
+  gap: 23px;
 }
 
 .hero {
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  padding: 26px;
+  padding: 28px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -90px;
+  top: -120px;
+  background: radial-gradient(circle, rgba(255, 214, 111, 0.22), transparent 65%);
 }
 
 .eyebrow {
   letter-spacing: 3px;
   color: #f2c86d;
   font-size: 12px;
+  font-weight: 800;
 }
 
 .hero h2 {
-  font-size: 42px;
+  font-size: 44px;
   margin: 0 0 10px;
-  max-width: 760px;
+  max-width: 780px;
+  line-height: 1.05;
 }
 
 .hero span {
@@ -163,20 +204,21 @@ input {
 .stats {
   display: flex;
   gap: 12px;
+  z-index: 2;
 }
 
 .stats div {
-  min-width: 105px;
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(0, 0, 0, 0.28);
+  min-width: 108px;
+  padding: 17px;
+  border-radius: 19px;
+  background: rgba(0, 0, 0, 0.3);
   text-align: center;
 }
 
 .stats b {
   display: block;
-  font-size: 28px;
-  color: #78ffc0;
+  font-size: 29px;
+  color: #70ffb7;
 }
 
 .stats small {
@@ -184,8 +226,8 @@ input {
 }
 
 .terminal {
-  padding: 22px;
-  min-height: 520px;
+  padding: 23px;
+  min-height: 530px;
   position: relative;
   overflow: hidden;
 }
@@ -195,21 +237,26 @@ input {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 10%, rgba(255,215,122,.16), transparent 30%),
-    radial-gradient(circle at 80% 20%, rgba(68,255,154,.09), transparent 28%);
+    radial-gradient(circle at 20% 10%, rgba(255, 215, 122, 0.16), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(68, 255, 154, 0.09), transparent 28%);
   pointer-events: none;
 }
 
-.terminal-head {
+.terminal-head,
+.market-strip,
+.pro-chart {
   position: relative;
   z-index: 2;
+}
+
+.terminal-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .terminal-head h3 {
-  font-size: 30px;
+  font-size: 31px;
   margin: 0;
   color: #ffd77a;
 }
@@ -219,37 +266,59 @@ input {
 }
 
 .terminal-head strong {
-  font-size: 34px;
+  font-size: 35px;
 }
 
 .price-up {
   color: #63ffad;
-  text-shadow: 0 0 18px rgba(99, 255, 173, 0.4);
+  text-shadow: 0 0 18px rgba(99, 255, 173, 0.42);
 }
 
 .price-down {
   color: #ff5968;
-  text-shadow: 0 0 18px rgba(255, 89, 104, 0.4);
+  text-shadow: 0 0 18px rgba(255, 89, 104, 0.42);
+}
+
+.market-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 11px;
+  margin-top: 18px;
+}
+
+.market-strip div {
+  padding: 13px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.market-strip small {
+  display: block;
+  color: #87949c;
+  margin-bottom: 5px;
+}
+
+.market-strip b {
+  color: #f4d17b;
 }
 
 .pro-chart {
-  position: relative;
-  z-index: 2;
   height: 390px;
-  margin-top: 25px;
+  margin-top: 22px;
   padding: 22px 78px 58px 24px;
-  border-radius: 24px;
+  border-radius: 25px;
   overflow: hidden;
   border: 1px solid rgba(255, 215, 122, 0.14);
   background:
-    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
-    radial-gradient(circle at 20% 20%, rgba(255,215,122,.08), transparent 30%),
-    linear-gradient(180deg, rgba(3,8,12,.98), rgba(8,14,18,.82));
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    radial-gradient(circle at 20% 20%, rgba(255, 215, 122, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(3, 8, 12, 0.98), rgba(8, 14, 18, 0.82));
   background-size: 44px 44px, 44px 44px, auto, auto;
   box-shadow:
-    inset 0 0 90px rgba(0,0,0,.62),
-    0 24px 60px rgba(0,0,0,.42);
+    inset 0 0 95px rgba(0, 0, 0, 0.64),
+    0 24px 60px rgba(0, 0, 0, 0.42);
 }
 
 .pro-chart::before {
@@ -257,8 +326,8 @@ input {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, transparent 0%, rgba(255,215,122,.05) 50%, transparent 100%),
-    radial-gradient(circle at 75% 25%, rgba(68,255,154,.08), transparent 28%);
+    linear-gradient(90deg, transparent 0%, rgba(255, 215, 122, 0.05) 50%, transparent 100%),
+    radial-gradient(circle at 75% 25%, rgba(68, 255, 154, 0.08), transparent 28%);
   pointer-events: none;
 }
 
@@ -288,8 +357,8 @@ input {
   top: 48%;
   height: 1px;
   z-index: 4;
-  background: linear-gradient(90deg, transparent, rgba(255,215,122,.8), transparent);
-  box-shadow: 0 0 20px rgba(255,215,122,.25);
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 122, 0.8), transparent);
+  box-shadow: 0 0 20px rgba(255, 215, 122, 0.25);
 }
 
 .price-line b {
@@ -338,7 +407,7 @@ input {
   position: relative;
   flex: 1;
   min-width: 6px;
-  animation: candleIn .55s ease both;
+  animation: candleIn 0.55s ease both;
 }
 
 .wick-pro {
@@ -348,7 +417,7 @@ input {
   transform: translateX(-50%);
   border-radius: 99px;
   background: linear-gradient(180deg, transparent, #9faeb6 18%, #9faeb6 82%, transparent);
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .body-pro {
@@ -358,7 +427,7 @@ input {
   min-height: 7px;
   transform: translateX(-50%);
   border-radius: 5px;
-  border: 1px solid rgba(255,255,255,.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .body-pro::after {
@@ -367,21 +436,21 @@ input {
   inset: 2px 3px auto 3px;
   height: 35%;
   border-radius: 99px;
-  background: rgba(255,255,255,.22);
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .bull {
   background: linear-gradient(180deg, #b7ffe0, #22d978 55%, #0d9c54);
   box-shadow:
-    0 0 12px rgba(68,255,154,.58),
-    0 0 28px rgba(68,255,154,.18);
+    0 0 12px rgba(68, 255, 154, 0.58),
+    0 0 28px rgba(68, 255, 154, 0.18);
 }
 
 .bear {
   background: linear-gradient(180deg, #ffb0b8, #ef4355 55%, #aa1727);
   box-shadow:
-    0 0 12px rgba(255,77,93,.58),
-    0 0 28px rgba(255,77,93,.18);
+    0 0 12px rgba(255, 77, 93, 0.58),
+    0 0 28px rgba(255, 77, 93, 0.18);
 }
 
 .volume-layer {
@@ -394,7 +463,7 @@ input {
   align-items: end;
   gap: 5px;
   z-index: 3;
-  opacity: .82;
+  opacity: 0.82;
 }
 
 .volume {
@@ -404,18 +473,19 @@ input {
 }
 
 .bull-volume {
-  background: linear-gradient(180deg, rgba(93,255,174,.7), rgba(93,255,174,.12));
+  background: linear-gradient(180deg, rgba(93, 255, 174, 0.7), rgba(93, 255, 174, 0.12));
 }
 
 .bear-volume {
-  background: linear-gradient(180deg, rgba(255,89,104,.7), rgba(255,89,104,.12));
+  background: linear-gradient(180deg, rgba(255, 89, 104, 0.7), rgba(255, 89, 104, 0.12));
 }
 
 @keyframes candleIn {
   from {
     opacity: 0;
-    transform: translateY(18px) scaleY(.9);
+    transform: translateY(18px) scaleY(0.9);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scaleY(1);
@@ -424,12 +494,12 @@ input {
 
 .grid {
   display: grid;
-  grid-template-columns: 1.1fr 1.1fr .9fr 1.1fr;
+  grid-template-columns: 1.1fr 1.1fr 0.9fr 1.1fr;
   gap: 18px;
 }
 
 .card {
-  padding: 20px;
+  padding: 21px;
 }
 
 .card h3 {
@@ -446,7 +516,7 @@ label {
 select {
   width: 100%;
   padding: 14px;
-  border-radius: 14px;
+  border-radius: 15px;
   background: #070d12;
   color: white;
   border: 1px solid #22313a;
@@ -461,7 +531,7 @@ select {
 .split button,
 .execute {
   border: 0;
-  border-radius: 14px;
+  border-radius: 15px;
   padding: 14px;
   cursor: pointer;
 }
@@ -486,6 +556,7 @@ select {
   background: linear-gradient(135deg, #e3a137, #ffe08a);
   color: #111;
   font-weight: 900;
+  box-shadow: 0 14px 28px rgba(255, 208, 105, 0.2);
 }
 
 input[type="range"] {
@@ -493,8 +564,16 @@ input[type="range"] {
   accent-color: #f3c969;
 }
 
+.risk-good {
+  color: #63ffad;
+}
+
+.risk-bad {
+  color: #ff5968;
+}
+
 .score {
-  height: 11px;
+  height: 12px;
   border-radius: 99px;
   background: #151f24;
   overflow: hidden;
@@ -509,13 +588,15 @@ input[type="range"] {
 .mission {
   font-size: 22px;
   color: #fff;
+  line-height: 1.35;
 }
 
 .trade {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 10px 0;
+  gap: 12px;
 }
 
 .positive {
@@ -526,7 +607,7 @@ input[type="range"] {
   color: #ff5968;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .game {
     grid-template-columns: 1fr;
   }
@@ -547,6 +628,10 @@ input[type="range"] {
     flex-wrap: wrap;
   }
 
+  .market-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .pro-chart {
     padding-right: 58px;
   }
@@ -562,5 +647,37 @@ input[type="range"] {
 
   .price-scale {
     width: 44px;
+  }
+}
+
+@media (max-width: 620px) {
+  .dashboard,
+  .sidebar {
+    padding: 18px;
+  }
+
+  .hero h2 {
+    font-size: 32px;
+  }
+
+  .terminal-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .terminal-head strong {
+    font-size: 28px;
+  }
+
+  .market-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .candlestick-layer {
+    gap: 3px;
+  }
+
+  .body-pro {
+    width: 80%;
   }
 }
