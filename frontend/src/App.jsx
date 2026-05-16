@@ -1,166 +1,64 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import "./App.css";
+
+const SYMBOLS = ["BTC/USDT", "ETH/USDT", "GOLD", "EUR/USD", "NASDAQ"];
 
 export default function App() {
-  const [balance, setBalance] = useState(1000);
-  const [btcPrice, setBtcPrice] = useState(64250);
-  const [message, setMessage] = useState("AI ожидает сигнал...");
-  const [trades, setTrades] = useState([]);
+  const [symbol, setSymbol] = useState("BTC/USDT");
+  const [direction, setDirection] = useState("BUY");
 
-  function randomPrice() {
-    return Math.floor(Math.random() * 4000 - 2000);
-  }
-
-  function buyTrade() {
-    const move = randomPrice();
-    const newPrice = btcPrice + move;
-    const profit = Math.floor(Math.random() * 120);
-
-    setBtcPrice(newPrice);
-    setBalance(balance + profit);
-
-    setMessage(
-      profit > 50
-        ? "✅ AI успешно открыл BUY позицию"
-        : "⚠️ Рынок нестабилен"
-    );
-
-    setTrades([
-      {
-        type: "BUY",
-        result: "+" + profit + "$",
-      },
-      ...trades,
-    ]);
-  }
-
-  function sellTrade() {
-    const move = randomPrice();
-    const newPrice = btcPrice - move;
-    const loss = Math.floor(Math.random() * 90);
-
-    setBtcPrice(newPrice);
-    setBalance(balance - loss);
-
-    setMessage(
-      loss < 40
-        ? "✅ SELL позиция закрыта"
-        : "❌ Убыточная сделка"
-    );
-
-    setTrades([
-      {
-        type: "SELL",
-        result: "-" + loss + "$",
-      },
-      ...trades,
-    ]);
-  }
+  const signal = useMemo(() => {
+    const confidence = Math.floor(62 + Math.random() * 28);
+    const risk = confidence > 78 ? "Medium" : "High";
+    return { confidence, risk };
+  }, [symbol, direction]);
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#050816",
-        color: "white",
-        fontFamily: "Arial",
-        padding: "30px",
-      }}
-    >
-      <h1 style={{ textAlign: "center" }}>
-        AncientTrade AI
-      </h1>
+    <div className="app">
+      <header className="hero">
+        <h1>Ancient Trade AI</h1>
+        <p>AI trading simulator for learning market logic, risk and discipline.</p>
+      </header>
 
-      <div
-        style={{
-          background: "#111827",
-          borderRadius: "20px",
-          padding: "30px",
-          maxWidth: "800px",
-          margin: "0 auto",
-        }}
-      >
-        <h2>BTC / USDT</h2>
+      <main className="card">
+        <h2>Market Simulator</h2>
 
-        <h3>💰 Balance: ${balance}</h3>
+        <label>Asset</label>
+        <select value={symbol} onChange={(e) => setSymbol(e.target.value)}>
+          {SYMBOLS.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
 
-        <h3>₿ BTC Price: ${btcPrice}</h3>
-
-        <div
-          style={{
-            height: "220px",
-            background:
-              "linear-gradient(180deg,#13203a,#0b1020)",
-            borderRadius: "15px",
-            marginTop: "20px",
-            marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#4ade80",
-            fontSize: "24px",
-          }}
-        >
-          📈 LIVE MARKET
-        </div>
-
-        <p>{message}</p>
-
-        <div
-          style={{
-            display: "flex",
-            gap: "15px",
-            marginTop: "20px",
-          }}
-        >
+        <label>Direction</label>
+        <div className="buttons">
           <button
-            onClick={buyTrade}
-            style={{
-              flex: 1,
-              padding: "16px",
-              background: "#16a34a",
-              border: "none",
-              borderRadius: "14px",
-              color: "white",
-              fontSize: "18px",
-            }}
+            className={direction === "BUY" ? "active buy" : ""}
+            onClick={() => setDirection("BUY")}
           >
             BUY
           </button>
-
           <button
-            onClick={sellTrade}
-            style={{
-              flex: 1,
-              padding: "16px",
-              background: "#dc2626",
-              border: "none",
-              borderRadius: "14px",
-              color: "white",
-              fontSize: "18px",
-            }}
+            className={direction === "SELL" ? "active sell" : ""}
+            onClick={() => setDirection("SELL")}
           >
             SELL
           </button>
         </div>
 
-        <div style={{ marginTop: "30px" }}>
-          <h3>📜 Trade History</h3>
-
-          {trades.map((trade, index) => (
-            <div
-              key={index}
-              style={{
-                background: "#1f2937",
-                padding: "12px",
-                borderRadius: "10px",
-                marginTop: "10px",
-              }}
-            >
-              {trade.type} → {trade.result}
-            </div>
-          ))}
+        <div className="result">
+          <h3>AI Analysis</h3>
+          <p>
+            Signal: <b>{direction}</b> on <b>{symbol}</b>
+          </p>
+          <p>Confidence: {signal.confidence}%</p>
+          <p>Risk level: {signal.risk}</p>
         </div>
-      </div>
+
+        <p className="warning">
+          Educational simulator only. No real money trading, no deposits, no withdrawals.
+        </p>
+      </main>
     </div>
   );
 }
